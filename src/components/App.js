@@ -4,7 +4,7 @@ import Loader from 'react-loader-spinner'
 import apiService from '../services/apiService';
 import SearchBar from './SearchBar/SearchBar';
 import ImageGallery from './ImageGallery/ImageGallery';
-import LoadMore from './LoarMore/LoadMore';
+import Button from './Button/Button';
 import Modal from './Modal/Modal';
 
 class App extends Component {
@@ -84,7 +84,7 @@ class App extends Component {
       <div className="page-container">
         <SearchBar updateQuery={ this.updateQuery }/>
         {this.state.error && (
-          <p>Whoops, something went wrong: {this.state.error.message}</p>
+          <p>Что то пошло не так: {this.state.error.message}</p>
         )}
         {this.state.pictures.length > 0 && (
           <ImageGallery pictures={ this.state.pictures } getBigPicture={ this.getBigPicture }/>
@@ -93,7 +93,7 @@ class App extends Component {
           <Loader className="loader" type="ThreeDots" color="#e4e4e4" height={80} width={80} />
         )}
         {this.state.pictures.length >= 12 && (
-          <LoadMore page={this.state.page} loadMorePictures={ this.loadMorePictures }/>
+          <Button title={ 'Больше' } page={this.state.page} handler={ this.loadMorePictures }/>
         )}
         {this.state.isModal && (
           <Modal bigPicture={ this.state.bigPicture } closeModal={ this.closeModal }/>

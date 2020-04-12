@@ -28,7 +28,7 @@ class SearchForm extends Component {
     return (
       <form className="search-form" onSubmit={ this.handleSubmit }>
         <button type="submit" className="search-form__button">
-          <span className="search-form__button-label">Search</span>
+          <span className="search-form__button-label">Поиск</span>
         </button>
         <input
           onChange={ this.handleChange }
@@ -37,7 +37,7 @@ class SearchForm extends Component {
           type="text"
           autoComplete="off"
           autoFocus
-          placeholder="Search images and photos"
+          placeholder="Введите то, что хотите найти..."
         />
       </form>
     )
