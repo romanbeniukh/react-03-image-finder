@@ -28,7 +28,7 @@ class App extends Component {
           this.setState(state => ({
             pictures: state.pictures.concat(picture)
           }));
-          this.scrollToTarget(picture[0].id)
+          picture.length && this.scrollToTarget(picture[0].id)
         })
         .catch(error => this.setState({ error }))
         .finally(() => this.setState({ isLoading: false }));
