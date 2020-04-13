@@ -1,4 +1,5 @@
 import React from 'react';
+import T from 'prop-types';
 
 const Notification = ({ message }) => (
   <div className="notification">
@@ -7,5 +8,9 @@ const Notification = ({ message }) => (
     </span>
   </div>
 );
+
+Notification.propTypes = {
+  message: T.string.isRequired,
+};
 
 export default Notification;
