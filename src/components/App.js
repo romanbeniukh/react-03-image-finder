@@ -6,6 +6,7 @@ import SearchBar from './SearchBar/SearchBar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
 import Modal from './Modal/Modal';
+import Notification from './Notification/Notification';
 
 class App extends Component {
   state = {
@@ -13,6 +14,7 @@ class App extends Component {
     bigPicture: '',
     query: '',
     page: 1,
+    isEmpty: false,
     isLoading: false,
     isModal: false,
     error: null,
@@ -20,7 +22,11 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevState.query !== this.state.query || prevState.page !== this.state.page) {
-      this.setState({ isLoading: true });
+      this.setState({
+        isLoading: true,
+        isEmpty: false,
+        error: null,
+      });
 
       apiService
         .fetchPicturesWithQuery(this.state.query, this.state.page)
@@ -28,7 +34,8 @@ class App extends Component {
           this.setState(state => ({
             pictures: state.pictures.concat(picture)
           }));
-          picture.length && this.scrollToTarget(picture[0].id)
+          !picture.length && this.updateState(`isEmpty`, true);
+          picture.length && this.scrollToTarget(picture[0].id);
         })
         .catch(error => this.setState({ error }))
         .finally(() => this.setState({ isLoading: false }));
@@ -80,23 +87,27 @@ class App extends Component {
   };
 
   render() {
+    const { pictures, bigPicture, page, error, isModal, isLoading, isEmpty } = this.state;
     return (
       <div className="page-container">
         <SearchBar updateQuery={ this.updateQuery }/>
-        {this.state.error && (
-          <p>Что то пошло не так: {this.state.error.message}</p>
+        {error && (
+          <Notification message={ `Что то пошло не так: ${error.message}` }/>
         )}
-        {this.state.pictures.length > 0 && (
-          <ImageGallery pictures={ this.state.pictures } getBigPicture={ this.getBigPicture }/>
+        {isEmpty && (
+          <Notification message={ `По вашему запросу ничего нет :(` }/>
         )}
-        {this.state.isLoading && (
+        {pictures.length > 0 && (
+          <ImageGallery pictures={ pictures } getBigPicture={ this.getBigPicture }/>
+        )}
+        {isLoading && (
           <Loader className="loader" type="ThreeDots" color="#e4e4e4" height={80} width={80} />
         )}
-        {this.state.pictures.length >= 12 && (
-          <Button title={ 'Больше' } page={this.state.page} handler={ this.loadMorePictures }/>
+        {pictures.length >= 12 && (
+          <Button title={ 'Больше' } page={page} handler={ this.loadMorePictures }/>
         )}
-        {this.state.isModal && (
-          <Modal bigPicture={ this.state.bigPicture } closeModal={ this.closeModal }/>
+        {isModal && (
+          <Modal bigPicture={ bigPicture } closeModal={ this.closeModal }/>
         )}
       </div>
     )
