@@ -4,7 +4,7 @@ import SearchForm from './SearchForm';
 
 const SearchBar = ({ updateQuery }) => (
   <header className="search-bar">
-    <SearchForm updateQuery={updateQuery}/>
+    <SearchForm updateQuery={updateQuery} />
   </header>
 );
 

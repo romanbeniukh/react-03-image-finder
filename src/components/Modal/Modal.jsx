@@ -1,4 +1,4 @@
-import React, {Component, createRef} from 'react';
+import React, { Component, createRef } from 'react';
 import T from 'prop-types';
 
 class Modal extends Component {
@@ -10,20 +10,20 @@ class Modal extends Component {
   backdropRef = createRef();
 
   componentDidMount() {
-    window.addEventListener('keydown', this.handleKeypress)
+    window.addEventListener('keydown', this.handleKeypress);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeypress)
+    window.removeEventListener('keydown', this.handleKeypress);
   }
 
-  handleKeypress = (e) => {
+  handleKeypress = e => {
     if (e.code !== 'Escape') return;
 
     this.props.closeModal();
   };
 
-  handleBackdropClick = ( e ) => {
+  handleBackdropClick = e => {
     const { current } = this.backdropRef;
 
     if (current && e.target !== current) {
@@ -34,15 +34,15 @@ class Modal extends Component {
   };
 
   render() {
+    const { bigPicture } = this.props;
+
     return (
-      <div className="overlay" ref={ this.backdropRef } onClick={ this.handleBackdropClick }>
+      <div className="overlay" ref={this.backdropRef} onClick={this.handleBackdropClick}>
         <div className="modal">
-          <img className="modal__img"
-               src={ this.props.bigPicture }
-               alt="bigPicture" />
+          <img className="modal__img" src={bigPicture} alt="bigPicture" />
         </div>
       </div>
-    )
+    );
   }
 }
 

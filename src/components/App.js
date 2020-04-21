@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
-import Loader from 'react-loader-spinner'
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import Loader from 'react-loader-spinner';
 import apiService from '../services/apiService';
 import SearchBar from './SearchBar/SearchBar';
 import ImageGallery from './ImageGallery/ImageGallery';
@@ -20,8 +20,10 @@ class App extends Component {
     error: null,
   };
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevState.query !== this.state.query || prevState.page !== this.state.page) {
+  componentDidUpdate(prevProps, prevState) {
+    const { query, page } = this.state;
+
+    if (prevState.query !== query || prevState.page !== page) {
       this.setState({
         isLoading: true,
         isEmpty: false,
@@ -29,10 +31,10 @@ class App extends Component {
       });
 
       apiService
-        .fetchPicturesWithQuery(this.state.query, this.state.page)
+        .fetchPicturesWithQuery(query, page)
         .then(picture => {
           this.setState(state => ({
-            pictures: state.pictures.concat(picture)
+            pictures: state.pictures.concat(picture),
           }));
           !picture.length && this.updateState(`isEmpty`, true);
           picture.length && this.scrollToTarget(picture[0].id);
@@ -40,20 +42,20 @@ class App extends Component {
         .catch(error => this.setState({ error }))
         .finally(() => this.setState({ isLoading: false }));
     }
-  };
+  }
 
-  updateState = ( state, value ) => {
+  updateState = (state, value) => {
     this.setState({
-      [state]: value
-    })
+      [state]: value,
+    });
   };
 
-  updateQuery = ( value ) => {
+  updateQuery = value => {
     value !== this.state.query && this.resetBeforeNewQuery();
     this.updateState('query', value);
   };
 
-  loadMorePictures = ( value ) => {
+  loadMorePictures = value => {
     value++;
     this.updateState('page', value);
   };
@@ -63,7 +65,7 @@ class App extends Component {
     this.updateState('pictures', []);
   };
 
-  scrollToTarget = ( id ) => {
+  scrollToTarget = id => {
     const target = document.getElementById(id).getBoundingClientRect().top + window.scrollY - 80;
 
     window.scrollTo({
@@ -72,7 +74,7 @@ class App extends Component {
     });
   };
 
-  getBigPicture = ( e ) => {
+  getBigPicture = e => {
     this.updateState('bigPicture', e.target.dataset.src);
     this.openModal();
   };
@@ -90,27 +92,15 @@ class App extends Component {
     const { pictures, bigPicture, page, error, isModal, isLoading, isEmpty } = this.state;
     return (
       <div className="page-container">
-        <SearchBar updateQuery={ this.updateQuery }/>
-        {error && (
-          <Notification message={ `Что то пошло не так: ${error.message}` }/>
-        )}
-        {isEmpty && (
-          <Notification message={ `По вашему запросу ничего нет :(` }/>
-        )}
-        {pictures.length > 0 && (
-          <ImageGallery pictures={ pictures } getBigPicture={ this.getBigPicture }/>
-        )}
-        {isLoading && (
-          <Loader className="loader" type="ThreeDots" color="#e4e4e4" height={80} width={80} />
-        )}
-        {pictures.length >= 12 && (
-          <Button title={ 'Больше' } page={page} handler={ this.loadMorePictures }/>
-        )}
-        {isModal && (
-          <Modal bigPicture={ bigPicture } closeModal={ this.closeModal }/>
-        )}
+        <SearchBar updateQuery={this.updateQuery} />
+        {error && <Notification message={`Что то пошло не так: ${error.message}`} />}
+        {isEmpty && <Notification message="По вашему запросу ничего нет :(" />}
+        {pictures.length > 0 && <ImageGallery pictures={pictures} getBigPicture={this.getBigPicture} />}
+        {isLoading && <Loader className="loader" type="ThreeDots" color="#e4e4e4" height={80} width={80} />}
+        {pictures.length >= 12 && <Button title="Больше" page={page} handler={this.loadMorePictures} />}
+        {isModal && <Modal bigPicture={bigPicture} closeModal={this.closeModal} />}
       </div>
-    )
+    );
   }
 }
 

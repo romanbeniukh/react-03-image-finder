@@ -3,9 +3,7 @@ import T from 'prop-types';
 
 const Notification = ({ message }) => (
   <div className="notification">
-    <span className="notification__message">
-      { message }
-    </span>
+    <span className="notification__message">{message}</span>
   </div>
 );
 

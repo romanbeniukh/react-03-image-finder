@@ -3,11 +3,7 @@ import T from 'prop-types';
 
 const ImageGalleryItem = ({ picture }) => (
   <>
-    <img data-src={ picture.largeImageURL }
-         src={ picture.webformatURL }
-         alt={ picture.id }
-         className="image-gallery__img"
-    />
+    <img data-src={picture.largeImageURL} src={picture.webformatURL} alt={picture.id} className="image-gallery__img" />
   </>
 );
 

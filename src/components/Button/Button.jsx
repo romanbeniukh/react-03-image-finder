@@ -2,8 +2,10 @@ import React from 'react';
 import T from 'prop-types';
 
 const Button = ({ title, page, handler }) => (
-  <div className="button-wrap" >
-    <button className="button-wrap__btn" onClick={ () => handler(page) }>{ title }</button>
+  <div className="button-wrap">
+    <button type="button" className="button-wrap__btn" onClick={() => handler(page)}>
+      {title}
+    </button>
   </div>
 );
 
