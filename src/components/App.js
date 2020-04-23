@@ -36,7 +36,7 @@ class App extends Component {
           this.setState(state => ({
             pictures: state.pictures.concat(picture),
           }));
-          !picture.length && this.updateState(`isEmpty`, true);
+          !picture.length && this.setState({ isEmpty: true });
           picture.length && this.scrollToTarget(picture[0].id);
         })
         .catch(error => this.setState({ error }))
@@ -44,25 +44,22 @@ class App extends Component {
     }
   }
 
-  updateState = (state, value) => {
+  updateQuery = value => {
+    value !== this.state.query && this.resetBeforeNewQuery();
+    this.setState({ query: value });
+  };
+
+  loadMorePictures = page => {
     this.setState({
-      [state]: value,
+      page: page + 1,
     });
   };
 
-  updateQuery = value => {
-    value !== this.state.query && this.resetBeforeNewQuery();
-    this.updateState('query', value);
-  };
-
-  loadMorePictures = value => {
-    value++;
-    this.updateState('page', value);
-  };
-
   resetBeforeNewQuery = () => {
-    this.updateState('page', 1);
-    this.updateState('pictures', []);
+    this.setState({
+      page: 1,
+      pictures: [],
+    });
   };
 
   scrollToTarget = id => {
@@ -75,17 +72,19 @@ class App extends Component {
   };
 
   getBigPicture = e => {
-    this.updateState('bigPicture', e.target.dataset.src);
+    this.setState({ bigPicture: e.target.dataset.src });
     this.openModal();
   };
 
   openModal = () => {
-    this.updateState('isModal', true);
+    this.setState({ isModal: true });
   };
 
   closeModal = () => {
-    this.updateState('isModal', false);
-    this.updateState('bigPicture', '');
+    this.setState({
+      isModal: false,
+      bigPicture: '',
+    });
   };
 
   render() {
